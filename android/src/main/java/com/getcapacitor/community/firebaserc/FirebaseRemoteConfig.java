@@ -42,7 +42,7 @@ public class FirebaseRemoteConfig extends Plugin {
     }
 
     @PluginMethod()
-    public void init(PluginCall call) {
+    public void initialize(PluginCall call) {
         int minFetchTimeInSecs = call.getInt("minimumFetchIntervalInSeconds", 3600);
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
             .setFetchTimeoutInSeconds(minFetchTimeInSecs)
