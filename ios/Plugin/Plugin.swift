@@ -14,6 +14,13 @@ public class FirebaseRemoteConfig: CAPPlugin {
     public override func load() {
         if self.remoteConfig == nil {
             self.remoteConfig = RemoteConfig.remoteConfig()
+            
+            let standardUserDefaults = UserDefaults.standard
+            let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
+            
+            if remoteConfigDefaults != nil {
+                self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
+            }
         }
     }
     
