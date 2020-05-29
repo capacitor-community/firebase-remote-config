@@ -128,25 +128,12 @@ public class FirebaseRemoteConfig extends Plugin {
     }
 
     @PluginMethod()
-    public void getDouble(PluginCall call) {
+    public void getNumber(PluginCall call) {
         if (call.hasOption("key")) {
             String key = call.getString("key");
             JSObject result = new JSObject();
             result.put("key", key);
             result.put("value", getFirebaseRCValue(key).asDouble());
-            result.put("source", getFirebaseRCValue(key).getSource());
-        } else {
-            call.error(ERROR_MISSING_KEY);
-        }
-    }
-
-    @PluginMethod()
-    public void getLong(PluginCall call) {
-        if (call.hasOption("key")) {
-            String key = call.getString("key");
-            JSObject result = new JSObject();
-            result.put("key", key);
-            result.put("value", getFirebaseRCValue(key).asLong());
             result.put("source", getFirebaseRCValue(key).getSource());
         } else {
             call.error(ERROR_MISSING_KEY);
