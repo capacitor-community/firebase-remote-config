@@ -1,7 +1,7 @@
 {
-  "name": "firebase-remote-config",
+  "name": "@capacitor-community/firebase-remote-config",
   "version": "0.0.1",
-  "description": "Firebase remote config plugin for Capacitor",
+  "description": "A native plugin for firebase remote config",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
@@ -42,9 +42,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:capacitor-community/native-audio.git"
+    "url": "https://github.com/capacitor-community/firebase-remote-config"
   },
   "bugs": {
-    "url": "git@github.com:capacitor-community/native-audio.git/issues"
+    "url": "https://github.com/capacitor-community/firebase-remote-config/issues"
   }
 }

@@ -1,5 +1,6 @@
 package com.getcapacitor.community.firebaserc;
 
+import android.Manifest;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,12 @@ import java.util.Collections;
 
 import static com.getcapacitor.community.firebaserc.Constant.ERROR_MISSING_KEY;
 
-@NativePlugin()
+@NativePlugin(
+    permissions = {
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.INTERNET,
+    }
+)
 public class FirebaseRemoteConfig extends Plugin {
 
     public static final String TAG = "FirebaseRemoteConfig";
