@@ -137,7 +137,7 @@ FirebaseRemoteConfig.getByteArray({
  *          source - Indicates that the source of value retrieved (default, remote, static)
  */
 FirebaseRemoteConfig.getNumber({
-  key: 'array key',
+  key: 'number key',
 });
 
 /**
