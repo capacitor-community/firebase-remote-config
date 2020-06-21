@@ -21,6 +21,11 @@
     "@capacitor/ios": "latest",
     "@capacitor/android": "latest"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "files": [
     "dist/",
     "ios/",
