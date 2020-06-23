@@ -1,6 +1,6 @@
 
   Pod::Spec.new do |s|
-    s.name = 'FirebaseRemoteConfig'
+    s.name = 'CapacitorCommunityFirebaseRemoteConfig'
     s.version = '0.1.0'
     s.summary = 'A native plugin for firebase remote config'
     s.license = 'MIT'
