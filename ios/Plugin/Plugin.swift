@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
-import Firebase
+import FirebaseCore
+import FirebaseRemoteConfig
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -12,6 +13,10 @@ public class FirebaseRemoteConfig: CAPPlugin {
     var remoteConfig: RemoteConfig?
     
     public override func load() {
+        if (FirebaseApp.app() == nil) {
+          FirebaseApp.configure();
+        }
+        
         if self.remoteConfig == nil {
             self.remoteConfig = RemoteConfig.remoteConfig()
             
@@ -62,6 +67,8 @@ public class FirebaseRemoteConfig: CAPPlugin {
                 call.error("Error occured while executing failAndActivate()")
             }
         })
+        
+        call.success()
     }
     
     @objc func getBoolean(_ call: CAPPluginCall) {
