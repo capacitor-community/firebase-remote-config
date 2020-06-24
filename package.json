@@ -36,7 +36,7 @@
     "dist/",
     "ios/",
     "android/",
-    "FirebaseRemoteConfig.podspec"
+    "CapacitorCommunityFirebaseRemoteConfig.podspec"
   ],
   "keywords": [
     "capacitor",
