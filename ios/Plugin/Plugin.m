@@ -4,7 +4,7 @@
 // Define the plugin using the CAP_PLUGIN Macro, and
 // each method the plugin supports using the CAP_PLUGIN_METHOD macro.
 CAP_PLUGIN(FirebaseRemoteConfig, "FirebaseRemoteConfig",
-           CAP_PLUGIN_METHOD(init, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(initialize, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(fetch, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(active, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(fetchAndActivate, CAPPluginReturnPromise);
