@@ -80,16 +80,18 @@ git checkout -b firebase-remote-config
 
 ## Supported methods
 
-| Name             | Android | iOS | Web |
-| :--------------- | :------ | :-- | :-- |
-| initialize       | ✅      | ✅  | ❌  |
-| fetch            | ✅      | ✅  | ❌  |
-| activate         | ✅      | ✅  | ❌  |
-| fetchAndActivate | ✅      | ✅  | ❌  |
-| getBoolean       | ✅      | ✅  | ❌  |
-| getByteArray     | ✅      | ✅  | ❌  |
-| getNumber        | ✅      | ✅  | ❌  |
-| getString        | ✅      | ✅  | ❌  |
+| Name                | Android | iOS | Web |
+| :------------------ | :------ | :-- | :-- |
+| initializeFirebase  | ❌      | ❌  | ✅  |
+| setDefaultWebConfig | ❌      | ❌  | ✅  |
+| initialize          | ✅      | ✅  | ✅  |
+| fetch               | ✅      | ✅  | ✅  |
+| activate            | ✅      | ✅  | ✅  |
+| fetchAndActivate    | ✅      | ✅  | ✅  |
+| getBoolean          | ✅      | ✅  | ✅  |
+| getByteArray        | ✅      | ✅  | ✅  |
+| getNumber           | ✅      | ✅  | ✅  |
+| getString           | ✅      | ✅  | ✅  |
 
 ## Usage
 
@@ -102,11 +104,41 @@ import { Plugins } from "@capacitor/core";
 const { FirebaseRemoteConfig } = Plugins;
 
 /**
+ * NOTE: Web Platform only!
+ * This method will initialize firebase app if not yet initialized.
+ * @param firebase configs - from google-service.json or GoogleService-Info.plist
+ * @returns void
+ */
+FirebaseRemoteConfig.initializeFirebase({
+  apiKey: "...",
+  authDomain: "...",
+  databaseURL: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "...",
+  measurementId: "...",
+});
+
+/**
+ * NOTE: Web Platform only!
+ * This method will set default remote config values.
+ * @param options - key/value params with default values
+ * @returns void
+ */
+FirebaseRemoteConfig.setDefaultWebConfig({
+  has_sale: false,
+  event_name: "clearance_event",
+});
+
+/**
  * This method will configure remote config object instance and set the minimum fetch interval to allow for frequest refreshes.
  * @param minimumFetchIntervalInSeconds - interval in seconds (default: 3600)
  * @returns void
  */
-FirebaseRemoteConfig.initialize();
+FirebaseRemoteConfig.initialize({
+  minimumFetchIntervalInSeconds: 3600,
+});
 
 /**
  * This method will execute fetch task to retrieve config
