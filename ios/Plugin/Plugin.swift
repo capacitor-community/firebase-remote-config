@@ -67,8 +67,6 @@ public class FirebaseRemoteConfig: CAPPlugin {
                 call.error("Error occured while executing failAndActivate()")
             }
         })
-        
-        call.success()
     }
     
     @objc func getBoolean(_ call: CAPPluginCall) {
