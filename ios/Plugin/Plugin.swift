@@ -36,6 +36,7 @@ public class FirebaseRemoteConfig: CAPPlugin {
             let settings: RemoteConfigSettings = RemoteConfigSettings()
             settings.minimumFetchInterval = TimeInterval(minFetchInterval)
             self.remoteConfig?.configSettings = settings
+            call.success()
         }
     }
     
