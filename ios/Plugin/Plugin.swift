@@ -50,13 +50,7 @@ public class FirebaseRemoteConfig: CAPPlugin {
     }
     
     @objc func activate(_ call: CAPPluginCall) {
-        self.remoteConfig?.activate(completionHandler: { (error) in
-            if error != nil {
-                call.error(error?.localizedDescription ?? "Error occured while executing activate()")
-            } else {
-                call.success()
-            }
-        })
+        self.remoteConfig?.activate()
     }
     
     @objc func fetchAndActivate(_ call: CAPPluginCall) {
