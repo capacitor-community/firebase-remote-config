@@ -8,7 +8,8 @@ import {
 
 declare var window: any;
 
-export class FirebaseRemoteConfigWeb extends WebPlugin
+export class FirebaseRemoteConfigWeb
+  extends WebPlugin
   implements FirebaseRemoteConfigPlugin {
   public readonly ready: Promise<any>;
   private readyResolver: Function;
@@ -243,7 +244,7 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
         document.getElementById(scripts[0]) &&
         document.getElementById(scripts[1])
       ) {
-        return resolve();
+        return resolve(null);
       }
 
       this.scripts.forEach((script: { key: string; src: string }) => {
