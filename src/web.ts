@@ -217,7 +217,7 @@ export class FirebaseRemoteConfigWeb
     if (!options) 
       throw new Error(this.options_missing_mssg);
 
-    await this.firebaseReadyPromise();
+    await this.firebaseObjectReadyPromise();
       const app = this.isFirebaseInitialized() ? window.firebase : window.firebase.initializeApp(options);
       this.remoteConfigRef = app.remoteConfig();
       this.readyResolver();
@@ -252,7 +252,7 @@ export class FirebaseRemoteConfigWeb
     });
   }
 
-  private firebaseReadyPromise(): Promise<void> {
+  private firebaseObjectReadyPromise(): Promise<void> {
     var tries = 100;
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
