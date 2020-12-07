@@ -278,16 +278,8 @@ export class FirebaseRemoteConfigWeb
   }
 
   private isFirebaseInitialized() {
-    if (!window.firebase) {
-      return false;
-    }
-
-    const firebaseApps = window.firebase.apps;
-    if (firebaseApps && firebaseApps.length === 0) {
-      return false;
-    }
-
-    return true;
+    const length = window.firebase?.apps?.length;
+    return length && length > 0;
   }
 }
 
