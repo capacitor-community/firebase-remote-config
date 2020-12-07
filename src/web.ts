@@ -40,27 +40,6 @@ export class FirebaseRemoteConfigWeb
     this.configure();
   }
 
-  /**
-   * Configure and Initialize FirebaseApp if not present
-   * @param options - web app's Firebase configuration
-   * @returns firebase analytics object reference
-   * Platform: Web
-   */
-  initializeFirebase(options: FirebaseInitOptions): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
-
-      if (!options) {
-        reject(this.options_missing_mssg);
-        return;
-      }
-
-      const app = this.isFirebaseInitialized() ? window.firebase : window.firebase.initializeApp(options);
-      this.remoteConfigRef = app.remoteConfig();
-      resolve(this.remoteConfigRef);
-    });
-  }
-
   setDefaultWebConfig(options: any): Promise<void> {
     return new Promise(async (resolve, reject) => {
       await this.ready;
@@ -221,6 +200,32 @@ export class FirebaseRemoteConfigWeb
 
   get remoteConfig() {
     return this.remoteConfigRef;
+  }
+
+  // 
+  // Note: The methods below are common to all Firebase capacitor plugins. Best to create `capacitor-community / firebase-common`,
+  // move the code there and add it as module to all FB plugins.
+  // 
+
+  /**
+   * Configure and Initialize FirebaseApp if not present
+   * @param options - web app's Firebase configuration
+   * @returns firebase analytics object reference
+   * Platform: Web
+   */
+  initializeFirebase(options: FirebaseInitOptions): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      await this.ready;
+
+      if (!options) {
+        reject(this.options_missing_mssg);
+        return;
+      }
+
+      const app = this.isFirebaseInitialized() ? window.firebase : window.firebase.initializeApp(options);
+      this.remoteConfigRef = app.remoteConfig();
+      resolve(this.remoteConfigRef);
+    });
   }
 
   private async configure() {
