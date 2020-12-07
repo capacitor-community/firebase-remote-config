@@ -132,7 +132,7 @@ export class FirebaseRemoteConfigWeb
         .remoteConfig()
         .fetchAndActivate()
         .then((data: any) => {
-          console.log(data);
+          // console.log(data);
           resolve(data);
         })
         .catch(reject);
@@ -276,7 +276,7 @@ export class FirebaseRemoteConfigWeb
           clearInterval(interval);
           resolve( null );
         } else if (tries-- <= 0) {
-          reject("Firebase is not loading");
+          reject("Firebase fails to load");
         }
       }, 50);
     } );
