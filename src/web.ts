@@ -245,25 +245,31 @@ export class FirebaseRemoteConfigWeb
     }, 50);
   }
 
-  private loadScripts() {
-    return new Promise((resolve, reject) => {
-      const scripts = this.scripts.map((script) => script.key);
-      if (
-        document.getElementById(scripts[0]) &&
-        document.getElementById(scripts[1])
-      ) {
-        return resolve(null);
-      }
+  /**
+   * Check for existing loaded script and load new scripts
+   */
+  private loadScripts(): Promise<Array<any>> {
+    return Promise.all( this.scripts.map( s => this.loadScript(s.key, s.src) ) )
+  }
 
-      this.scripts.forEach((script: { key: string; src: string }) => {
+  /**
+   * Loaded single script with provided id and source
+   * @param id - unique identifier of the script
+   * @param src - source of the script
+   */
+  private loadScript(id: string, src: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (document.getElementById(id)){
+        resolve(null);
+      } else {
         const file = document.createElement("script");
         file.type = "text/javascript";
-        file.src = script.src;
-        file.id = script.key;
+        file.src = src;
+        file.id = id;
         file.onload = resolve;
         file.onerror = reject;
-        document.querySelector("head").appendChild(file);
-      });
+        document.querySelector("head").appendChild(file);  
+      }
     });
   }
 
