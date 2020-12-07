@@ -32,3 +32,14 @@ export interface RCReturnDataArray {
   value: any[];
   source: string;
 }
+
+export interface FirebaseInitOptions {
+  apiKey: string;
+  authDomain: string;
+  databaseURL: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId: string;
+}

@@ -4,6 +4,7 @@ import {
   RCValueOption,
   RCReturnData,
   RCReturnDataArray,
+  FirebaseInitOptions,
 } from "./definitions";
 
 declare var window: any;
@@ -11,6 +12,8 @@ declare var window: any;
 export class FirebaseRemoteConfigWeb
   extends WebPlugin
   implements FirebaseRemoteConfigPlugin {
+  readonly options_missing_mssg = "Firebase options are missing";
+
   public readonly ready: Promise<any>;
   private readyResolver: Function;
   private remoteConfigRef: any;
@@ -37,19 +40,24 @@ export class FirebaseRemoteConfigWeb
     this.configure();
   }
 
-  initializeFirebase(options: any): Promise<void> {
+  /**
+   * Configure and Initialize FirebaseApp if not present
+   * @param options - web app's Firebase configuration
+   * @returns firebase analytics object reference
+   * Platform: Web
+   */
+  initializeFirebase(options: FirebaseInitOptions): Promise<any> {
     return new Promise(async (resolve, reject) => {
       await this.ready;
 
-      if (options && !this.isFirebaseInitialized()) {
-        const app = window.firebase.initializeApp(options);
-        this.remoteConfigRef = app.remoteConfig();
-
-        resolve();
+      if (!options) {
+        reject(this.options_missing_mssg);
         return;
       }
 
-      reject("Firebase App already initialized.");
+      const app = this.isFirebaseInitialized() ? window.firebase : window.firebase.initializeApp(options);
+      this.remoteConfigRef = app.remoteConfig();
+      resolve(this.remoteConfigRef);
     });
   }
 
