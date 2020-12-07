@@ -37,7 +37,7 @@ export class FirebaseRemoteConfigWeb
     });
 
     this.ready = new Promise((resolve) => (this.readyResolver = resolve));
-    this.configure();
+    this.loadScripts();
   }
 
   setDefaultWebConfig(options: any): Promise<void> {
@@ -213,38 +213,22 @@ export class FirebaseRemoteConfigWeb
    * @returns firebase analytics object reference
    * Platform: Web
    */
-  initializeFirebase(options: FirebaseInitOptions): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async initializeFirebase(options: FirebaseInitOptions): Promise<any> {
+    if (!options) 
+      throw new Error(this.options_missing_mssg);
 
-      if (!options) {
-        reject(this.options_missing_mssg);
-        return;
-      }
-
+    await this.firebaseReadyPromise();
       const app = this.isFirebaseInitialized() ? window.firebase : window.firebase.initializeApp(options);
       this.remoteConfigRef = app.remoteConfig();
-      resolve(this.remoteConfigRef);
-    });
-  }
-
-  private async configure() {
-    await this.loadScripts();
-
-    if (this.isFirebaseInitialized()) {
-      this.remoteConfigRef = window.firebase.remoteConfig();
       this.readyResolver();
-    } else {
-      console.error("Firebase App has not yet initialized.");
-    }
+    return this.remoteConfigRef;
   }
 
   /**
    * Check for existing loaded script and load new scripts
    */
   private loadScripts(): Promise<Array<any>> {
-    const scriptsReadyPromises = this.scripts.map( s => this.loadScript(s.key, s.src) );
-    return Promise.all( [ ...scriptsReadyPromises, this.firebaseReadyPromise() ] );
+    return Promise.all( this.scripts.map( s => this.loadScript(s.key, s.src) ) );
   }
 
   /**
@@ -272,7 +256,7 @@ export class FirebaseRemoteConfigWeb
     var tries = 100;
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
-        if (this.isFirebaseInitialized()) {
+        if (window.firebase) {
           clearInterval(interval);
           resolve( null );
         } else if (tries-- <= 0) {
