@@ -224,32 +224,22 @@ export class FirebaseRemoteConfigWeb
   }
 
   private async configure() {
-    try {
-      await this.loadScripts();
+    await this.loadScripts();
 
-      if (window.firebase && this.isFirebaseInitialized()) {
-        this.remoteConfigRef = window.firebase.remoteConfig();
-      } else {
-        console.error("Firebase App has not yet initialized.");
-      }
-    } catch (error) {
-      throw error;
-    }
-
-    const interval = setInterval(() => {
-      if (!window.firebase) {
-        return;
-      }
-      clearInterval(interval);
+    if (this.isFirebaseInitialized()) {
+      this.remoteConfigRef = window.firebase.remoteConfig();
       this.readyResolver();
-    }, 50);
+    } else {
+      console.error("Firebase App has not yet initialized.");
+    }
   }
 
   /**
    * Check for existing loaded script and load new scripts
    */
   private loadScripts(): Promise<Array<any>> {
-    return Promise.all( this.scripts.map( s => this.loadScript(s.key, s.src) ) )
+    const scriptsReadyPromises = this.scripts.map( s => this.loadScript(s.key, s.src) );
+    return Promise.all( [ ...scriptsReadyPromises, this.firebaseReadyPromise() ] );
   }
 
   /**
@@ -271,6 +261,20 @@ export class FirebaseRemoteConfigWeb
         document.querySelector("head").appendChild(file);  
       }
     });
+  }
+
+  private firebaseReadyPromise(): Promise<void> {
+    var tries = 100;
+    return new Promise((resolve, reject) => {
+      const interval = setInterval(() => {
+        if (this.isFirebaseInitialized()) {
+          clearInterval(interval);
+          resolve( null );
+        } else if (tries-- <= 0) {
+          reject("Firebase is not loading");
+        }
+      }, 50);
+    } );
   }
 
   private isFirebaseInitialized() {
