@@ -143,19 +143,11 @@ export class FirebaseRemoteConfigWeb
     return this.getValue(options, "Boolean");
   }
 
-  getByteArray(options: RCValueOption): Promise<RCReturnDataArray> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
-
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
-
-      resolve(this.remoteConfigRef.getValue(options.key).asString());
-    });
+  getByteArray(options: RCValueOption): Promise<RCReturnData> {
+    // Should be deprecated 
+    // - was implemented as a string which ruined the data.
+    // - FB doesn't support byteArray - https://firebase.google.com/docs/reference/js/firebase.remoteconfig.RemoteConfig
+    return this.getString(options);
   }
   
   getNumber(options: RCValueOption): Promise<RCReturnData> {

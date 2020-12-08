@@ -12,7 +12,7 @@ export interface FirebaseRemoteConfigPlugin {
   activate(): Promise<void>;
   fetchAndActivate(): Promise<void>;
   getBoolean(options: RCValueOption): Promise<RCReturnData>;
-  getByteArray(options: RCValueOption): Promise<RCReturnDataArray>;
+  getByteArray(options: RCValueOption): Promise<RCReturnData>;
   getNumber(options: RCValueOption): Promise<RCReturnData>;
   getString(options: RCValueOption): Promise<RCReturnData>;
 }
