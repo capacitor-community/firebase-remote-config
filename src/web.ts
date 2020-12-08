@@ -3,7 +3,6 @@ import {
   FirebaseRemoteConfigPlugin,
   RCValueOption,
   RCReturnData,
-  RCReturnDataArray,
   FirebaseInitOptions,
 } from "./definitions";
 
