@@ -140,18 +140,7 @@ export class FirebaseRemoteConfigWeb
   }
 
   getBoolean(options: RCValueOption): Promise<RCReturnData> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
-
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
-
-      resolve(this.remoteConfigRef.getValue(options.key).asBoolean());
-    });
+    return this.getValue(options, "Boolean");
   }
 
   getByteArray(options: RCValueOption): Promise<RCReturnDataArray> {
@@ -168,34 +157,25 @@ export class FirebaseRemoteConfigWeb
       resolve(this.remoteConfigRef.getValue(options.key).asString());
     });
   }
+  
   getNumber(options: RCValueOption): Promise<RCReturnData> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
-
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
-
-      resolve(this.remoteConfigRef.getValue(options.key).asNumber());
-    });
+    return this.getValue(options, "Number");
   }
 
   getString(options: RCValueOption): Promise<RCReturnData> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+    return this.getValue(options, "String");
+  }
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
-
-      resolve(this.remoteConfigRef.getValue(options.key).asString());
-    });
+  async getValue(options: RCValueOption, format:'String'|'Number'|'Boolean' = null): Promise<RCReturnData> {
+    await this.ready;
+    if (!this.remoteConfigRef)
+      throw new Error("Remote config is not initialized. Make sure initialize() is called at first.");
+    const retVal =  this.remoteConfigRef.getValue(options.key);
+    return {
+      key: options.key,
+      value: format ? retVal[ "as"+format ]() : retVal._value,
+      source: retVal._source,
+    }
   }
 
   get remoteConfig() {
