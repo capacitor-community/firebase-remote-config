@@ -256,7 +256,7 @@ export class FirebaseRemoteConfigWeb
     var tries = 100;
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
-        if (window.firebase) {
+        if (window.firebase?.remoteConfig) {
           clearInterval(interval);
           resolve( null );
         } else if (tries-- <= 0) {
