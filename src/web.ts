@@ -157,7 +157,7 @@ export class FirebaseRemoteConfigWeb
     return this.getValue(options, "String");
   }
 
-  async getValue(options: RCValueOption, format:'String'|'Number'|'Boolean' = null): Promise<RCReturnData> {
+  private async getValue(options: RCValueOption, format:'String'|'Number'|'Boolean' = null): Promise<RCReturnData> {
     await this.ready;
     if (!this.remoteConfigRef)
       throw new Error("Remote config is not initialized. Make sure initialize() is called at first.");
