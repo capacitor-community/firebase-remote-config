@@ -6,7 +6,7 @@
 CAP_PLUGIN(FirebaseRemoteConfig, "FirebaseRemoteConfig",
            CAP_PLUGIN_METHOD(initialize, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(fetch, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(active, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(activate, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(fetchAndActivate, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getBoolean, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getString, CAPPluginReturnPromise);
