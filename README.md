@@ -1,27 +1,19 @@
 # Capacitor Firebase Remote Config Plugin
 
-Capacitory community plugin for firebase remote config.
-
-## Maintainers
-
-| Maintainer    | GitHub                                      | Social                                           | Sponsoring Company |
-| ------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
-| Priyank Patel | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
-
-Mainteinance Status: Actively Maintained
+Capacitor community plugin for firebase remote config.
 
 ## Installation
 
 To use npm
 
 ```bash
-npm install @capacitor-community/firebase-remote-config
+npm install @joinflux/firebase-remote-config
 ```
 
 To use yarn
 
 ```bash
-yarn add @capacitor-community/firebase-remote-config
+yarn add @joinflux/firebase-remote-config
 ```
 
 Sync native files
@@ -67,17 +59,6 @@ Download appropriate google-services.json or GoogleService-Info.plist and place 
 
 **For iOS**: /ios/App/App
 
-## Examples
-
-[Click here](https://github.com/priyankpat/capacitor-plugins-example/tree/firebase-remote-config) for example on how to implement this plugin
-
-You can also clone the repository
-
-```bash
-git clone https://github.com/priyankpat/capacitor-plugins-example
-git checkout -b firebase-remote-config
-```
-
 ## Supported methods
 
 | Name                | Android | iOS | Web |
@@ -97,7 +78,7 @@ git checkout -b firebase-remote-config
 
 ```typescript
 // Must import the package once to make sure the web support initializes
-import "@capacitor-community/firebase-remote-config";
+import "@joinflux/firebase-remote-config";
 
 import { Plugins } from "@capacitor/core";
 
