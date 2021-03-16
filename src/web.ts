@@ -7,6 +7,7 @@ import {
 } from "./definitions";
 
 declare var window: any;
+const FIREBASE_VERSION = "8.3.0";
 
 export class FirebaseRemoteConfigWeb extends WebPlugin
   implements FirebaseRemoteConfigPlugin {
@@ -19,12 +20,11 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
   private scripts = [
     {
       key: "firebase-app",
-      src: "https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js",
+      src: `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`,
     },
     {
       key: "firebase-rc",
-      src:
-        "https://www.gstatic.com/firebasejs/7.15.4/firebase-remote-config.js",
+      src: `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-remote-config.js`,
     },
   ];
 
