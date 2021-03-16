@@ -1,18 +1,26 @@
-import { WebPlugin } from "@capacitor/core";
+import { registerWebPlugin, WebPlugin } from "@capacitor/core";
 import {
   FirebaseRemoteConfigPlugin,
   RCValueOption,
   RCReturnData,
   FirebaseInitOptions,
+  initOptions,
 } from "./definitions";
 
 declare var window: any;
+
+// Errors
+const ErrRemoteConfigNotInitialiazed = new Error(
+  "Remote config is not initialized. Make sure initialize() is called first."
+);
+const ErrMissingDefaultConfig = new Error("No default configuration found");
+const ErrMissingOptions = new Error("Firebase options are missing");
+
+// Firebase Library Version
 const FIREBASE_VERSION = "8.3.0";
 
 export class FirebaseRemoteConfigWeb extends WebPlugin
   implements FirebaseRemoteConfigPlugin {
-  readonly options_missing_mssg = "Firebase options are missing";
-
   public readonly ready: Promise<any>;
   private readyResolver: Function;
   private remoteConfigRef: any;
@@ -38,103 +46,60 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
     this.loadScripts();
   }
 
-  setDefaultWebConfig(options: any): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async setDefaultWebConfig(options: any): Promise<void> {
+    await this.ready;
 
-      if (!options) {
-        reject("No default configuration found.");
-        return;
-      }
+    if (!options) throw ErrMissingDefaultConfig;
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
+    if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-      this.remoteConfigRef.defaultConfig = options;
-      resolve();
-    });
+    this.remoteConfigRef.defaultConfig = options;
+    return;
   }
 
-  initialize(options: {
-    minimumFetchIntervalInSeconds: number;
-  }): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async initialize(options?: initOptions): Promise<void> {
+    await this.ready;
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
+    if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-      const interval =
-        options && options.minimumFetchIntervalInSeconds
-          ? options.minimumFetchIntervalInSeconds
-          : 3600;
+    const minimumFetchIntervalMillis =
+      options?.minimumFetchInterval ?? 1000 * 60 * 60 * 12; // 12 hours
 
-      this.remoteConfigRef.settings = {
-        minimumFetchIntervalInSeconds: interval,
-      };
+    const fetchTimeoutMillis = options?.fetchTimeout ?? 1 * 60000; // 1 minute
 
-      resolve();
-    });
+    this.remoteConfigRef.settings = {
+      minimumFetchIntervalMillis,
+      fetchTimeoutMillis,
+    };
+
+    return;
   }
 
-  fetch(): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async fetch(): Promise<void> {
+    await this.ready;
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
+    if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-      this.remoteConfigRef.fetch().then(resolve).catch(reject);
-    });
+    const data = await this.remoteConfigRef.fetch();
+    return data;
   }
 
-  activate(): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async activate(): Promise<void> {
+    await this.ready;
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
+    if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-      this.remoteConfigRef.activate().then(resolve).catch(reject);
-    });
+    const response = await this.remoteConfigRef.activate();
+    return response;
   }
 
-  fetchAndActivate(): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      await this.ready;
+  async fetchAndActivate(): Promise<void> {
+    await this.ready;
 
-      if (!this.remoteConfigRef) {
-        reject(
-          "Remote config is not initialized. Make sure initialize() is called at first."
-        );
-        return;
-      }
+    if (!this.remoteConfigRef) throw ErrRemoteConfigNotInitialiazed;
 
-      window.firebase
-        .remoteConfig()
-        .fetchAndActivate()
-        .then((data: any) => {
-          // console.log(data);
-          resolve(data);
-        })
-        .catch(reject);
-    });
+    const data = await this.remoteConfigRef.fetchAndActivate();
+    return data;
   }
 
   getBoolean(options: RCValueOption): Promise<RCReturnData> {
@@ -185,14 +150,17 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
    * Platform: Web
    */
   async initializeFirebase(options: FirebaseInitOptions): Promise<any> {
-    if (!options) throw new Error(this.options_missing_mssg);
+    if (!options) throw ErrMissingOptions;
 
     await this.firebaseObjectReadyPromise();
+
     const app = this.isFirebaseInitialized()
       ? window.firebase
       : window.firebase.initializeApp(options);
+
     this.remoteConfigRef = app.remoteConfig();
     this.readyResolver();
+
     return this.remoteConfigRef;
   }
 
@@ -208,23 +176,21 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
    * @param id - unique identifier of the script
    * @param src - source of the script
    */
-  private loadScript(id: string, src: string): Promise<any> {
+  private async loadScript(id: string, src: string): Promise<any> {
+    if (document.getElementById(id)) return;
+
     return new Promise((resolve, reject) => {
-      if (document.getElementById(id)) {
-        resolve(null);
-      } else {
-        const file = document.createElement("script");
-        file.type = "text/javascript";
-        file.src = src;
-        file.id = id;
-        file.onload = resolve;
-        file.onerror = reject;
-        document.querySelector("head").appendChild(file);
-      }
+      const file = document.createElement("script");
+      file.type = "text/javascript";
+      file.src = src;
+      file.id = id;
+      file.onload = resolve;
+      file.onerror = reject;
+      document.querySelector("head").appendChild(file);
     });
   }
 
-  private firebaseObjectReadyPromise(): Promise<void> {
+  private async firebaseObjectReadyPromise(): Promise<void> {
     var tries = 100;
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
@@ -248,5 +214,4 @@ const FirebaseRemoteConfig = new FirebaseRemoteConfigWeb();
 
 export { FirebaseRemoteConfig };
 
-import { registerWebPlugin } from "@capacitor/core";
 registerWebPlugin(FirebaseRemoteConfig);

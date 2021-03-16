@@ -5,9 +5,9 @@ declare module "@capacitor/core" {
 }
 
 export interface FirebaseRemoteConfigPlugin {
-  initializeFirebase(options: any): Promise<void>;
+  initializeFirebase(options: FirebaseInitOptions): Promise<void>;
   setDefaultWebConfig(options: any): Promise<void>;
-  initialize(options: { minimumFetchIntervalInSeconds: number }): Promise<void>;
+  initialize(options?: initOptions): Promise<void>;
   fetch(): Promise<void>;
   activate(): Promise<void>;
   fetchAndActivate(): Promise<void>;
@@ -15,6 +15,11 @@ export interface FirebaseRemoteConfigPlugin {
   getByteArray(options: RCValueOption): Promise<RCReturnData>;
   getNumber(options: RCValueOption): Promise<RCReturnData>;
   getString(options: RCValueOption): Promise<RCReturnData>;
+}
+
+export interface initOptions {
+  minimumFetchInterval?: number;
+  fetchTimeout?: number;
 }
 
 export interface RCValueOption {
