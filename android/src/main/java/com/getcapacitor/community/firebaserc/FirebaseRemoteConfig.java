@@ -56,9 +56,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -77,9 +77,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -98,9 +98,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -110,7 +110,7 @@ public class FirebaseRemoteConfig extends Plugin {
 
           @Override
           public void onFailure(@NonNull Exception e) {
-            call.error(e.getLocalizedMessage());
+            call.reject(e.getLocalizedMessage());
           }
         }
       );
@@ -126,7 +126,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -140,7 +140,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -154,7 +154,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -168,7 +168,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
