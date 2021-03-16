@@ -19,13 +19,6 @@ public class FirebaseRemoteConfig: CAPPlugin {
         
         if self.remoteConfig == nil {
             self.remoteConfig = RemoteConfig.remoteConfig()
-            
-            let standardUserDefaults = UserDefaults.standard
-            let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
-            
-            if remoteConfigDefaults != nil {
-                self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
-            }
         }
     }
     
@@ -131,6 +124,20 @@ public class FirebaseRemoteConfig: CAPPlugin {
     }
     
     @objc func getByteArray(_ call: CAPPluginCall) {
+        call.success()
+    }
+
+    @objc func initializeFirebase(_ call: CAPPluginCall) {
+        print("FirebaseRemoteConfig: initializeFirebase noop")
+        call.success()
+    }
+    @objc func setDefaultConfig(_ call: CAPPluginCall) {
+        let standardUserDefaults = UserDefaults.standard
+        let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
+        
+        if remoteConfigDefaults != nil {
+            self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
+        }
         call.success()
     }
 }
