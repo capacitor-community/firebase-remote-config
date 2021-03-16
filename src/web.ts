@@ -46,7 +46,7 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
     this.loadScripts();
   }
 
-  async setDefaultWebConfig(options: any): Promise<void> {
+  async setDefaultConfig(options: any): Promise<void> {
     await this.ready;
 
     if (!options) throw ErrMissingDefaultConfig;

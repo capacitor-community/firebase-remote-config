@@ -6,7 +6,7 @@ declare module "@capacitor/core" {
 
 export interface FirebaseRemoteConfigPlugin {
   initializeFirebase(options: FirebaseInitOptions): Promise<void>;
-  setDefaultWebConfig(options: any): Promise<void>;
+  setDefaultConfig(options: any): Promise<void>;
   initialize(options?: initOptions): Promise<void>;
   fetch(): Promise<void>;
   activate(): Promise<void>;
