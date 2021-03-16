@@ -53,7 +53,8 @@ public class MainActivity extends BridgeActivity {
 
 ## Configuration
 
-Download appropriate google-services.json or GoogleService-Info.plist and place it in the correct platform app directory.
+Download appropriate google-services.json or GoogleService-Info.plist and place
+it in the correct platform app directory.
 
 **For Android**: /android/app
 
@@ -61,18 +62,18 @@ Download appropriate google-services.json or GoogleService-Info.plist and place 
 
 ## Supported methods
 
-| Name                | Android | iOS | Web |
-| :------------------ | :------ | :-- | :-- |
-| initializeFirebase  | ❌      | ❌  | ✅  |
-| setDefaultWebConfig | ❌      | ❌  | ✅  |
-| initialize          | ✅      | ✅  | ✅  |
-| fetch               | ✅      | ✅  | ✅  |
-| activate            | ✅      | ✅  | ✅  |
-| fetchAndActivate    | ✅      | ✅  | ✅  |
-| getBoolean          | ✅      | ✅  | ✅  |
-| getByteArray        | ✅      | ✅  | ✅  |
-| getNumber           | ✅      | ✅  | ✅  |
-| getString           | ✅      | ✅  | ✅  |
+| Name               | Android | iOS | Web |
+| :----------------- | :------ | :-- | :-- |
+| initializeFirebase | ✅      | ✅  | ✅  |
+| setDefaultConfig   | ✅      | ✅  | ✅  |
+| initialize         | ✅      | ✅  | ✅  |
+| fetch              | ✅      | ✅  | ✅  |
+| activate           | ✅      | ✅  | ✅  |
+| fetchAndActivate   | ✅      | ✅  | ✅  |
+| getBoolean         | ✅      | ✅  | ✅  |
+| getByteArray       | ✅      | ✅  | ✅  |
+| getNumber          | ✅      | ✅  | ✅  |
+| getString          | ✅      | ✅  | ✅  |
 
 ## Usage
 
@@ -85,8 +86,10 @@ import { Plugins } from "@capacitor/core";
 const { FirebaseRemoteConfig } = Plugins;
 
 /**
- * NOTE: Web Platform only!
- * This method will initialize firebase app if not yet initialized.
+ * This method will initialize firebase app if not yet initialized. Note that it
+ * is safe to call but does nothing in iOS or Android as initialization is
+ * automatic on load.
+ *
  * @param firebase configs - from google-service.json or GoogleService-Info.plist
  * @returns void
  */
@@ -102,18 +105,22 @@ FirebaseRemoteConfig.initializeFirebase({
 });
 
 /**
- * NOTE: Web Platform only!
- * This method will set default remote config values.
+ * This method will set default remote config values. On Web, it will read from
+ * the parameters give. On Android and iOS it will use the build in mechanisms
+ * and ignore any parameters supplied.
+ *
  * @param options - key/value params with default values
  * @returns void
  */
-FirebaseRemoteConfig.setDefaultWebConfig({
+FirebaseRemoteConfig.setDefaultConfig({
   has_sale: false,
   event_name: "clearance_event",
 });
 
 /**
- * This method will configure remote config object instance and set the minimum fetch interval to allow for frequest refreshes.
+ * This method will configure remote config object instance and set the minimum
+ * fetch interval to allow for frequest refreshes.
+ *
  * @param minimumFetchIntervalInSeconds - interval in seconds (default: 3600)
  * @returns void
  */
@@ -130,13 +137,16 @@ FirebaseRemoteConfig.fetch();
 
 /**
  * This method will activate the fetched values making it available for your app
+ *
  * @param none
  * @returns void
  */
 FirebaseRemoteConfig.activate();
 
 /**
- * This method will fetch and activate the values making it available for your app
+ * This method will fetch and activate the values making it available for your
+ * app
+ *
  * @param none
  * @returns void
  */
