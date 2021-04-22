@@ -144,7 +144,6 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
         .remoteConfig()
         .fetchAndActivate()
         .then((data: any) => {
-          console.log(data);
           resolve(data);
         })
         .catch(reject);
