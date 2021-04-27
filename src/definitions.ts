@@ -1,3 +1,5 @@
+import firebase from "firebase";
+
 declare module "@capacitor/core" {
   interface PluginRegistry {
     FirebaseRemoteConfig: FirebaseRemoteConfigPlugin;
@@ -5,14 +7,13 @@ declare module "@capacitor/core" {
 }
 
 export interface FirebaseRemoteConfigPlugin {
-  initializeFirebase(options: FirebaseInitOptions): Promise<void>;
+  initializeFirebase(app: firebase.app.App): Promise<void>;
   setDefaultConfig(options: any): Promise<void>;
   initialize(options?: initOptions): Promise<void>;
   fetch(): Promise<void>;
   activate(): Promise<void>;
   fetchAndActivate(): Promise<void>;
   getBoolean(options: RCValueOption): Promise<RCReturnData>;
-  getByteArray(options: RCValueOption): Promise<RCReturnData>;
   getNumber(options: RCValueOption): Promise<RCReturnData>;
   getString(options: RCValueOption): Promise<RCReturnData>;
 }

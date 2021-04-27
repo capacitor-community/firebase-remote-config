@@ -15,7 +15,8 @@
   "author": "Priyank Patel <priyank.patel@stackspace.ca>",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "latest"
+    "@capacitor/core": "latest",
+    "firebase": "^8.4.0"
   },
   "devDependencies": {
     "@capacitor/android": "latest",
