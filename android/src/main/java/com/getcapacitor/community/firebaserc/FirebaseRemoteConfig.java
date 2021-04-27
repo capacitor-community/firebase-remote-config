@@ -33,22 +33,6 @@ public class FirebaseRemoteConfig extends Plugin {
 
     this.mFirebaseRemoteConfig =
       com.google.firebase.remoteconfig.FirebaseRemoteConfig.getInstance();
-
-    String fileName = bridge
-      .getActivity()
-      .getPreferences(Context.MODE_PRIVATE)
-      .getString("FirebaseRemoteConfigDefaults", "");
-    if (fileName.isEmpty()) {
-      this.mFirebaseRemoteConfig.setDefaultsAsync(
-          Collections.<String, Object>emptyMap()
-        );
-    } else {
-      Context context = bridge.getActivity().getApplicationContext();
-      int resourceId = context
-        .getResources()
-        .getIdentifier(fileName, "xml", context.getPackageName());
-      this.mFirebaseRemoteConfig.setDefaultsAsync(resourceId);
-    }
   }
 
   @PluginMethod
@@ -72,9 +56,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -93,9 +77,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -114,9 +98,9 @@ public class FirebaseRemoteConfig extends Plugin {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             } else {
-              call.error(task.getException().getMessage());
+              call.reject(task.getException().getMessage());
             }
           }
         }
@@ -126,7 +110,7 @@ public class FirebaseRemoteConfig extends Plugin {
 
           @Override
           public void onFailure(@NonNull Exception e) {
-            call.error(e.getLocalizedMessage());
+            call.reject(e.getLocalizedMessage());
           }
         }
       );
@@ -142,7 +126,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -156,7 +140,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -170,7 +154,7 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
   }
 
@@ -184,8 +168,35 @@ public class FirebaseRemoteConfig extends Plugin {
       result.put("source", getFirebaseRCValue(key).getSource());
       call.success(result);
     } else {
-      call.error(ERROR_MISSING_KEY);
+      call.reject(ERROR_MISSING_KEY);
     }
+  }
+
+  @PluginMethod
+  public void initializeFirebase(PluginCall call) {
+    call.success();
+  }
+
+  @PluginMethod
+  public void setDefaultConfig(PluginCall call) {
+    String fileName = bridge
+      .getActivity()
+      .getPreferences(Context.MODE_PRIVATE)
+      .getString("FirebaseRemoteConfigDefaults", "");
+
+    if (fileName.isEmpty()) {
+      this.mFirebaseRemoteConfig.setDefaultsAsync(
+          Collections.<String, Object>emptyMap()
+        );
+    } else {
+      Context context = bridge.getActivity().getApplicationContext();
+      int resourceId = context
+        .getResources()
+        .getIdentifier(fileName, "xml", context.getPackageName());
+      this.mFirebaseRemoteConfig.setDefaultsAsync(resourceId);
+    }
+
+    call.success();
   }
 
   private FirebaseRemoteConfigValue getFirebaseRCValue(String key) {

@@ -1,7 +1,8 @@
 {
-  "name": "@capacitor-community/firebase-remote-config",
-  "version": "0.1.3",
+  "name": "@joinflux/firebase-remote-config",
+  "version": "0.4.0",
   "description": "A native plugin for firebase remote config",
+  "homepage": "https://github.com/joinflux/firebase-remote-config",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
@@ -14,7 +15,8 @@
   "author": "Priyank Patel <priyank.patel@stackspace.ca>",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "latest"
+    "@capacitor/core": "latest",
+    "firebase": "^8.4.0"
   },
   "devDependencies": {
     "@capacitor/android": "latest",
@@ -36,7 +38,7 @@
     "dist/",
     "ios/",
     "android/",
-    "CapacitorCommunityFirebaseRemoteConfig.podspec"
+    "JoinfluxFirebaseRemoteConfig.podspec"
   ],
   "keywords": [
     "capacitor",
@@ -53,9 +55,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/capacitor-community/firebase-remote-config"
+    "url": "https://github.com/joinflux/firebase-remote-config"
   },
   "bugs": {
-    "url": "https://github.com/capacitor-community/firebase-remote-config/issues"
+    "url": "https://github.com/joinflux/firebase-remote-config/issues"
   }
 }

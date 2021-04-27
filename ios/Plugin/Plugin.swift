@@ -19,40 +19,40 @@ public class FirebaseRemoteConfig: CAPPlugin {
         
         if self.remoteConfig == nil {
             self.remoteConfig = RemoteConfig.remoteConfig()
-            
-            let standardUserDefaults = UserDefaults.standard
-            let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
-            
-            if remoteConfigDefaults != nil {
-                self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
-            }
         }
     }
     
     @objc func initialize(_ call: CAPPluginCall) {
-        let minFetchInterval = call.getInt("minimumFetchIntervalInSeconds") ?? 0
+        let minFetchInterval = call.getInt("minimumFetchInterval") ?? 0
+        let fetchTimeout = call.getInt("fetchTimeout") ?? 0
         
-        if self.remoteConfig != nil {
-            let settings: RemoteConfigSettings = RemoteConfigSettings()
-            settings.minimumFetchInterval = TimeInterval(minFetchInterval)
-            self.remoteConfig?.configSettings = settings
+        guard let remoteConfig = self.remoteConfig else {
+          call.reject("Missing initialization")
+          return
         }
+
+        let settings: RemoteConfigSettings = RemoteConfigSettings()
+        settings.minimumFetchInterval = TimeInterval(minFetchInterval)
+        settings.fetchTimeout = TimeInterval(fetchTimeout)
+        remoteConfig.configSettings = settings
+        call.success()
     }
     
     @objc func fetch(_ call: CAPPluginCall) {
         self.remoteConfig?.fetch(completionHandler: { (status, error) in
             if status == .success {
                 call.success()
-            } else {
-                call.error(error?.localizedDescription ?? "Error occured while executing fetch()")
-            }
+                return
+            } 
+            call.reject(error?.localizedDescription ?? "Error occured while executing fetch()")
+            return
         })
     }
     
     @objc func activate(_ call: CAPPluginCall) {
-        self.remoteConfig?.activate(completionHandler: { (error) in
+        self.remoteConfig?.activate(completion: { (status, error) in
             if error != nil {
-                call.error(error?.localizedDescription ?? "Error occured while executing activate()")
+                call.reject(error?.localizedDescription ?? "Error occured while executing activate()")
             } else {
                 call.success()
             }
@@ -64,7 +64,7 @@ public class FirebaseRemoteConfig: CAPPlugin {
             if status == .successFetchedFromRemote || status == .successUsingPreFetchedData {
                 call.success()
             } else {
-                call.error("Error occured while executing failAndActivate()")
+                call.reject("Error occured while executing failAndActivate()")
             }
         })
     }
@@ -82,10 +82,10 @@ public class FirebaseRemoteConfig: CAPPlugin {
                     "source": source!.rawValue as Int
                 ])
             } else {
-                call.error("Key is missing")
+                call.reject("Key is missing")
             }
         } else {
-            call.error("Key is missing")
+            call.reject("Key is missing")
         }
     }
     
@@ -102,10 +102,10 @@ public class FirebaseRemoteConfig: CAPPlugin {
                     "source": source!.rawValue as Int
                 ])
             } else {
-                call.error("Key is missing")
+                call.reject("Key is missing")
             }
         } else {
-            call.error("Key is missing")
+            call.reject("Key is missing")
         }
     }
     
@@ -122,14 +122,28 @@ public class FirebaseRemoteConfig: CAPPlugin {
                     "source": source!.rawValue as Int
                 ])
             } else {
-                call.error("Key is missing")
+                call.reject("Key is missing")
             }
         } else {
-            call.error("Key is missing")
+            call.reject("Key is missing")
         }
     }
     
     @objc func getByteArray(_ call: CAPPluginCall) {
+        call.success()
+    }
+
+    @objc func initializeFirebase(_ call: CAPPluginCall) {
+        print("FirebaseRemoteConfig: initializeFirebase noop")
+        call.success()
+    }
+    @objc func setDefaultConfig(_ call: CAPPluginCall) {
+        let standardUserDefaults = UserDefaults.standard
+        let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
+        
+        if remoteConfigDefaults != nil {
+            self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
+        }
         call.success()
     }
 }
