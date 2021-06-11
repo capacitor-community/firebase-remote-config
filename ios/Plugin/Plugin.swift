@@ -9,36 +9,38 @@ import FirebaseRemoteConfig
  */
 @objc(FirebaseRemoteConfig)
 public class FirebaseRemoteConfig: CAPPlugin {
-    
+
     var remoteConfig: RemoteConfig?
-    
+
     public override func load() {
         if (FirebaseApp.app() == nil) {
           FirebaseApp.configure();
         }
-        
+
         if self.remoteConfig == nil {
             self.remoteConfig = RemoteConfig.remoteConfig()
-            
+
             let standardUserDefaults = UserDefaults.standard
             let remoteConfigDefaults = standardUserDefaults.object(forKey: "FirebaseRemoteConfigDefaults".lowercased())
-            
+
             if remoteConfigDefaults != nil {
                 self.remoteConfig?.setDefaults(fromPlist: remoteConfigDefaults as? String)
             }
         }
     }
-    
+
     @objc func initialize(_ call: CAPPluginCall) {
         let minFetchInterval = call.getInt("minimumFetchIntervalInSeconds") ?? 0
-        
+
         if self.remoteConfig != nil {
             let settings: RemoteConfigSettings = RemoteConfigSettings()
             settings.minimumFetchInterval = TimeInterval(minFetchInterval)
             self.remoteConfig?.configSettings = settings
         }
+
+        call.success()
     }
-    
+
     @objc func fetch(_ call: CAPPluginCall) {
         self.remoteConfig?.fetch(completionHandler: { (status, error) in
             if status == .success {
@@ -48,9 +50,9 @@ public class FirebaseRemoteConfig: CAPPlugin {
             }
         })
     }
-    
+
     @objc func activate(_ call: CAPPluginCall) {
-        self.remoteConfig?.activate(completionHandler: { (error) in
+        self.remoteConfig?.activate(completion: { (status, error) in
             if error != nil {
                 call.error(error?.localizedDescription ?? "Error occured while executing activate()")
             } else {
@@ -58,7 +60,7 @@ public class FirebaseRemoteConfig: CAPPlugin {
             }
         })
     }
-    
+
     @objc func fetchAndActivate(_ call: CAPPluginCall) {
         self.remoteConfig?.fetchAndActivate(completionHandler: { (status, error) in
             if status == .successFetchedFromRemote || status == .successUsingPreFetchedData {
@@ -68,11 +70,11 @@ public class FirebaseRemoteConfig: CAPPlugin {
             }
         })
     }
-    
+
     @objc func getBoolean(_ call: CAPPluginCall) {
         if call.hasOption("key") {
             let key = call.getString("key")
-            
+
             if key != nil {
                 let value = self.remoteConfig?.configValue(forKey: key).boolValue
                 let source = self.remoteConfig?.configValue(forKey: key).source
@@ -88,11 +90,11 @@ public class FirebaseRemoteConfig: CAPPlugin {
             call.error("Key is missing")
         }
     }
-    
+
     @objc func getNumber(_ call: CAPPluginCall) {
         if call.hasOption("key") {
             let key = call.getString("key")
-            
+
             if key != nil {
                 let value = self.remoteConfig?.configValue(forKey: key).numberValue
                 let source = self.remoteConfig?.configValue(forKey: key).source
@@ -108,11 +110,11 @@ public class FirebaseRemoteConfig: CAPPlugin {
             call.error("Key is missing")
         }
     }
-    
+
     @objc func getString(_ call: CAPPluginCall) {
         if call.hasOption("key") {
             let key = call.getString("key")
-            
+
             if key != nil {
                 let value = self.remoteConfig?.configValue(forKey: key).stringValue
                 let source = self.remoteConfig?.configValue(forKey: key).source
@@ -128,7 +130,7 @@ public class FirebaseRemoteConfig: CAPPlugin {
             call.error("Key is missing")
         }
     }
-    
+
     @objc func getByteArray(_ call: CAPPluginCall) {
         call.success()
     }

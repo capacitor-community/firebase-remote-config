@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 import java.util.Collections;
+import java.util.Objects;
 
 @NativePlugin(
   permissions = {
@@ -23,6 +24,7 @@ import java.util.Collections;
   }
 )
 public class FirebaseRemoteConfig extends Plugin {
+
   public static final String TAG = "FirebaseRemoteConfig";
 
   private com.google.firebase.remoteconfig.FirebaseRemoteConfig mFirebaseRemoteConfig;
@@ -55,9 +57,11 @@ public class FirebaseRemoteConfig extends Plugin {
   public void initialize(PluginCall call) {
     int minFetchTimeInSecs = call.getInt("minimumFetchIntervalInSeconds", 3600);
     FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-      .setFetchTimeoutInSeconds(minFetchTimeInSecs)
+      .setMinimumFetchIntervalInSeconds(minFetchTimeInSecs)
       .build();
     this.mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+
+    call.success();
   }
 
   @PluginMethod
@@ -66,15 +70,18 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Void>() {
-
           @Override
           public void onComplete(@NonNull Task<Void> task) {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             } else {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             }
           }
         }
@@ -87,15 +94,18 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Boolean>() {
-
           @Override
           public void onComplete(@NonNull Task<Boolean> task) {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             } else {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             }
           }
         }
@@ -108,22 +118,24 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Boolean>() {
-
           @Override
           public void onComplete(@NonNull Task<Boolean> task) {
             if (task.isSuccessful()) {
               call.success();
             } else if (task.isCanceled()) {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             } else {
-              call.error(task.getException().getMessage());
+              call.error(
+                Objects.requireNonNull(task.getException()).getMessage()
+              );
             }
           }
         }
       )
       .addOnFailureListener(
         new OnFailureListener() {
-
           @Override
           public void onFailure(@NonNull Exception e) {
             call.error(e.getLocalizedMessage());

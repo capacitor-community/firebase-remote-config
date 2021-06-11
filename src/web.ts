@@ -221,7 +221,7 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
       if (window.firebase && this.isFirebaseInitialized()) {
         this.remoteConfigRef = window.firebase.remoteConfig();
       } else {
-        console.error("Firebase App has not yet initialized.");
+        console.reject("Firebase App has not yet initialized.");
       }
     } catch (error) {
       throw error;
