@@ -18,10 +18,11 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 import java.util.Collections;
 import java.util.Objects;
 
-@NativePlugin(
+@CapacitorPlugin(
   permissions = {
-    Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.INTERNET,
-  }
+    @Permission(strings = { Manifest.permission.ACCESS_NETWORK_STATE }, alias = "access_network_state"),
+    @Permission(strings = { Manifest.permission.INTERNET }, alias = "internet")
+    })
 )
 public class FirebaseRemoteConfig extends Plugin {
 
