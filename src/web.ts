@@ -271,10 +271,3 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
     return true;
   }
 }
-
-const FirebaseRemoteConfig = new FirebaseRemoteConfigWeb();
-
-export { FirebaseRemoteConfig };
-
-import { registerWebPlugin } from "@capacitor/core";
-registerWebPlugin(FirebaseRemoteConfig);
