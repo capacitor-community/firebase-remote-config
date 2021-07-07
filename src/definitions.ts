@@ -1,9 +1,3 @@
-declare module "@capacitor/core" {
-  interface PluginRegistry {
-    FirebaseRemoteConfig: FirebaseRemoteConfigPlugin;
-  }
-}
-
 export interface FirebaseRemoteConfigPlugin {
   initializeFirebase(options: any): Promise<void>;
   setDefaultWebConfig(options: any): Promise<void>;

@@ -253,7 +253,7 @@ export class FirebaseRemoteConfigWeb extends WebPlugin
         file.id = script.key;
         file.onload = resolve;
         file.onerror = reject;
-        document.querySelector("head").appendChild(file);
+        document.querySelector("head")!.appendChild(file);
       });
     });
   }
