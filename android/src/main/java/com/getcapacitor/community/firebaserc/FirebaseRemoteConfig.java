@@ -3,29 +3,37 @@ package com.getcapacitor.community.firebaserc;
 import static com.getcapacitor.community.firebaserc.Constant.ERROR_MISSING_KEY;
 
 import android.Manifest;
+import android.Manifest;
 import android.content.Context;
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Objects;
 
 @CapacitorPlugin(
+  name = "FirebaseRemoteConfig",
   permissions = {
-    @Permission(strings = { Manifest.permission.ACCESS_NETWORK_STATE }, alias = "access_network_state"),
-    @Permission(strings = { Manifest.permission.INTERNET }, alias = "internet")
-    })
+    @Permission(
+      strings = { Manifest.permission.ACCESS_NETWORK_STATE },
+      alias = "network"
+    ),
+    @Permission(strings = { Manifest.permission.INTERNET }, alias = "internet"),
+  }
 )
 public class FirebaseRemoteConfig extends Plugin {
-
   public static final String TAG = "FirebaseRemoteConfig";
 
   private com.google.firebase.remoteconfig.FirebaseRemoteConfig mFirebaseRemoteConfig;
@@ -71,6 +79,7 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Void>() {
+
           @Override
           public void onComplete(@NonNull Task<Void> task) {
             if (task.isSuccessful()) {
@@ -95,6 +104,7 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Boolean>() {
+
           @Override
           public void onComplete(@NonNull Task<Boolean> task) {
             if (task.isSuccessful()) {
@@ -119,6 +129,7 @@ public class FirebaseRemoteConfig extends Plugin {
       .addOnCompleteListener(
         bridge.getActivity(),
         new OnCompleteListener<Boolean>() {
+
           @Override
           public void onComplete(@NonNull Task<Boolean> task) {
             if (task.isSuccessful()) {
@@ -137,6 +148,7 @@ public class FirebaseRemoteConfig extends Plugin {
       )
       .addOnFailureListener(
         new OnFailureListener() {
+
           @Override
           public void onFailure(@NonNull Exception e) {
             call.error(e.getLocalizedMessage());
